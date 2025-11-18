@@ -19,7 +19,7 @@ jobs:
         - name: checkout code
           uses: actions/checkout@v4
 
-        - name: Extract version from tag
+        - name: Extract version from tagged commit
           id: vars
           run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
         
