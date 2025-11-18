@@ -11,9 +11,17 @@ jobs:
     build:
         runs-on: ubuntu-latest
 
+        # expose job outputs
+        outputs:
+          SHORT_SHA: ${{ steps.vars.outputs.short_sha }}
+
         steps:
         - name: checkout code
           uses: actions/checkout@v4
+
+        - name: Extract version from tag
+          id: vars
+          run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
         
 
         - name: Setup Go 1.22
@@ -52,9 +60,7 @@ jobs:
             username: ${{ secrets.DOCKER_USERNAME }}
             password: ${{ secrets.DOCKER_TOKEN }}
 
-        - name: Extract version from tag
-          id: vars
-          run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
+        
 
         - name: Docker Push
           uses: docker/build-push-action@v6
@@ -62,7 +68,7 @@ jobs:
             context: src/product-catalog
             file: src/product-catalog/Dockerfile
             push: true
-            tags: ${{ secrets.DOCKER_USERNAME }}/product-catalog:${{github.ref_name}}-${{ env.SHORT_SHA }}
+            tags: ${{ secrets.DOCKER_USERNAME }}/product-catalog:${{github.ref_name}}-${{ needs.build.outputs.SHORT_SHA }}
 
     
   
