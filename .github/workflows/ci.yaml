@@ -19,12 +19,10 @@ jobs:
         - name: checkout code
           uses: actions/checkout@v4
 
-        - name: Extract 7-char short SHA (job output)
-          id: get_short_sha
-          run: |
-            # create 7-char short sha
-            SHORT=${GITHUB_SHA::7}
-            echo "short_sha=$SHORT" >> $GITHUB_OUTPUT
+        - name: Extract version from tag
+          id: vars
+          run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
+        
 
         - name: Setup Go 1.22
           uses: actions/setup-go@v2
