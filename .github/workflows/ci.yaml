@@ -40,7 +40,7 @@ jobs:
             cd src/product-catalog
             go test ./...
     
-    
+    # this is docker build and push job
     docker:
         runs-on: ubuntu-latest
         
